@@ -4,6 +4,8 @@ import br.com.dio.desafio.dominio.Dev;
 import br.com.dio.desafio.dominio.Mentoria;
 
 import java.time.LocalDate;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,9 +24,9 @@ public class Main {
         mentoria.setDescricao("descrição mentoria java");
         mentoria.setData(LocalDate.now());
 
-        System.out.println(curso1);
+        /*System.out.println(curso1);
         System.out.println(curso2);
-        System.out.println(mentoria);
+        System.out.println(mentoria);*/
 
         Bootcamp bootcamp = new Bootcamp();
         bootcamp.setNome("Bootcamp Java Developer");
@@ -58,6 +60,42 @@ public class Main {
         System.out.println("Conteúdos Concluidos João:" + devJoao.getConteudosConcluidos());
         System.out.println("XP:" + devJoao.calcularTotalXp());
 
+        Scanner scanner = new Scanner(System.in);
+        int option;
+        do {
+            System.out.println("\nDigite uma opção: \n" +
+                    "1 - Ver cursos \n" +
+                    "2 - Ver devs \n" +
+                    "0 - Sair");
+
+            option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    getCursos(bootcamp.getConteudos());
+                    break;
+                case 2:
+                    System.out.println("escolheu 2");
+                    break;
+
+                case 0:
+                    System.out.println("Good By!");
+                    break;
+                default:
+                    System.out.println("Escolha inválida");
+            }
+        } while (option != 0);
     }
 
+    public static void getCursos(Set conteudos) {
+        System.out.println("\nOs cursos disponíveis são os seguintes:");
+        for (Object conteudo : conteudos) {
+            if (conteudo instanceof Curso) {
+                Curso curso = (Curso) conteudo;
+                System.out.println("Título: " + curso.getTitulo() +
+                        "\nDescição: " + curso.getDescricao() +
+                        "\nCarga Horária: " + curso.getCargaHoraria() + "\n");
+            }
+        }
+    }
 }

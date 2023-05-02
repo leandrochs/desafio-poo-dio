@@ -4,10 +4,16 @@ import br.com.dio.desafio.dominio.Dev;
 import br.com.dio.desafio.dominio.Mentoria;
 
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Main {
+    private static final int OP_VER_CURSOS = 1;
+    private static final int OP_VER_MENTORIAS = 2;
+    private static final int OP_VER_DEVS = 3;
+    private static final int OP_SAIR = 0;
+
     public static void main(String[] args) {
         Curso curso1 = new Curso();
         curso1.setTitulo("curso java");
@@ -37,81 +43,73 @@ public class Main {
         System.out.println("Conteúdos Inscritos Camila:" + devCamila.getConteudosInscritos());
         devCamila.progredir();
         devCamila.progredir();
-        System.out.println("-");
-        System.out.println("Conteúdos Inscritos Camila:" + devCamila.getConteudosInscritos());
-        System.out.println("Conteúdos Concluídos Camila:" + devCamila.getConteudosConcluidos());
-        System.out.println("XP:" + devCamila.calcularTotalXp());
-
-        System.out.println("-------");
 
         Dev devJoao = new Dev();
         devJoao.setNome("Joao");
         devJoao.inscreverBootcamp(bootcamp);
-        System.out.println("Conteúdos Inscritos João:" + devJoao.getConteudosInscritos());
         devJoao.progredir();
         devJoao.progredir();
         devJoao.progredir();
-        System.out.println("-");
-        System.out.println("Conteúdos Inscritos João:" + devJoao.getConteudosInscritos());
-        System.out.println("Conteúdos Concluidos João:" + devJoao.getConteudosConcluidos());
-        System.out.println("XP:" + devJoao.calcularTotalXp());
 
-        Scanner scanner = new Scanner(System.in);
-        int option;
+        int option = 0;
         do {
-            System.out.println("\nDigite uma opção: \n" +
-                    "1 - Ver cursos \n" +
-                    "2 - Ver Mentorias \n" +
-                    "3 - Ver devs \n" +
-                    "0 - Sair");
+            try {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("\n______________________________________________ \n" +
+                        "\nDigite uma opção: \n" +
+                        OP_VER_CURSOS + " - Ver cursos \n" +
+                        OP_VER_MENTORIAS + " - Ver Mentorias \n" +
+                        OP_VER_DEVS + " - Ver devs \n" +
+                        OP_SAIR + " - Sair");
 
-
-            option = scanner.nextInt();
-
-            switch (option) {
-                case 1:
-                    getCursos(bootcamp.getConteudos());
-                    break;
-                case 2:
-                    getMentorias(bootcamp.getConteudos());
-                    break;
-                case 3:
-                    getDevs(bootcamp.getDevsInscritos());
-                    break;
-                case 0:
-                    System.out.println("Good By!");
-                    break;
-                default:
-                    System.out.println("Opção inválida");
+                option = scanner.nextInt();
+                switch (option) {
+                    case OP_VER_CURSOS:
+                        processarOpcaoVerCursos(bootcamp.getConteudos());
+                        break;
+                    case OP_VER_MENTORIAS:
+                        processarOpcaoVerMentorias(bootcamp.getConteudos());
+                        break;
+                    case OP_VER_DEVS:
+                        processarOpcaoVerDevs(bootcamp.getDevsInscritos());
+                        break;
+                    case OP_SAIR:
+                        processarOpcaoSair();
+                        break;
+                    default:
+                        System.out.println("Opção inválida");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Opção inválida!");
             }
-        } while (option != 0);
+        } while (option != OP_SAIR);
     }
 
-    public static void getCursos(Set conteudos) {
+    private static void processarOpcaoVerCursos(Set conteudos) {
         System.out.println("\nOs cursos disponíveis são os seguintes:");
         for (Object conteudo : conteudos) {
             if (conteudo instanceof Curso) {
                 Curso curso = (Curso) conteudo;
                 System.out.println("Título: " + curso.getTitulo() +
                         "\nDescição: " + curso.getDescricao() +
-                        "\nData: " + curso.getCargaHoraria() + "\n");
+                        "\nCarga Horária: " + curso.getCargaHoraria() + "h\n");
             }
         }
     }
 
-    public static void getMentorias(Set conteudos) {
+    public static void processarOpcaoVerMentorias(Set conteudos) {
         System.out.println("\nAs Mentorias disponíveis são as seguintes:");
         for (Object conteudo : conteudos) {
             if (conteudo instanceof Mentoria) {
                 Mentoria mentoria = (Mentoria) conteudo;
                 System.out.println("Título: " + mentoria.getTitulo() +
                         "\nDescição: " + mentoria.getDescricao() +
-                        "\nCarga Horária: " + mentoria.getData() + "\n");
+                        "\nData: " + mentoria.getData() + "\n");
             }
         }
     }
 
-    public static void getDevs(Set<Dev> devsInscritos) {
+    public static void processarOpcaoVerDevs(Set<Dev> devsInscritos) {
         System.out.println("\nOs Devs inscritos são os seguintes:");
         for (Dev dev : devsInscritos) {
             System.out.println("Nome: " + dev.getNome() +
@@ -119,6 +117,10 @@ public class Main {
                     "\nConteúdos concluídos: " + getTitulos(dev.getConteudosConcluidos()) +
                     "\nTotal XP: " + dev.calcularTotalXp() + "\n");
         }
+    }
+
+    public static void processarOpcaoSair() {
+        System.out.println("Good By!");
     }
 
     public static String getTitulos(Set conteudos) {
@@ -132,7 +134,6 @@ public class Main {
                 message += mentoria.getTitulo() + ", ";
             }
         }
-
         return (message.equals("")) ? "Nenhum conteúdo." : message.substring(0, message.length() - 2) + ".";
     }
 }

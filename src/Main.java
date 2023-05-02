@@ -85,26 +85,27 @@ public class Main {
         } while (option != OP_SAIR);
     }
 
-    private static void processarOpcaoVerCursos(Set conteudos) {
+    private static void processarOpcaoVerCursos(Set<Conteudo> conteudos) {
         System.out.println("\nOs cursos disponíveis são os seguintes:");
         for (Object conteudo : conteudos) {
             if (conteudo instanceof Curso) {
                 Curso curso = (Curso) conteudo;
-                System.out.println("Título: " + curso.getTitulo() +
-                        "\nDescição: " + curso.getDescricao() +
-                        "\nCarga Horária: " + curso.getCargaHoraria() + "h\n");
+                System.out.println("Título: " + curso.getTitulo() + "\n" +
+                        "Descrição: " + curso.getDescricao() + "\n" +
+                        "Carga Horária: " + curso.getCargaHoraria() + "h\n"
+                );
             }
         }
     }
 
-    public static void processarOpcaoVerMentorias(Set conteudos) {
+    public static void processarOpcaoVerMentorias(Set<Conteudo> conteudos) {
         System.out.println("\nAs Mentorias disponíveis são as seguintes:");
         for (Object conteudo : conteudos) {
             if (conteudo instanceof Mentoria) {
                 Mentoria mentoria = (Mentoria) conteudo;
-                System.out.println("Título: " + mentoria.getTitulo() +
-                        "\nDescição: " + mentoria.getDescricao() +
-                        "\nData: " + mentoria.getData() + "\n");
+                System.out.println("Título: " + mentoria.getTitulo() + "\n" +
+                        "Descição: " + mentoria.getDescricao() + "\n" +
+                        "Data: " + mentoria.getData() + "\n");
             }
         }
     }
@@ -112,10 +113,10 @@ public class Main {
     public static void processarOpcaoVerDevs(Set<Dev> devsInscritos) {
         System.out.println("\nOs Devs inscritos são os seguintes:");
         for (Dev dev : devsInscritos) {
-            System.out.println("Nome: " + dev.getNome() +
-                    "\nConteúdos inscritos: " + getTitulos(dev.getConteudosInscritos()) +
-                    "\nConteúdos concluídos: " + getTitulos(dev.getConteudosConcluidos()) +
-                    "\nTotal XP: " + dev.calcularTotalXp() + "\n");
+            System.out.println("Nome: " + dev.getNome() + "\n" +
+                    "Conteúdos inscritos: " + getTitulos(dev.getConteudosInscritos()) + "\n" +
+                    "Conteúdos concluídos: " + getTitulos(dev.getConteudosConcluidos()) + "\n" +
+                    "Total XP: " + dev.calcularTotalXp() + "\n");
         }
     }
 
@@ -123,17 +124,21 @@ public class Main {
         System.out.println("Good By!");
     }
 
-    public static String getTitulos(Set conteudos) {
-        String message = "";
+    public static StringBuilder getTitulos(Set<Conteudo> conteudos) {
+        StringBuilder message = new StringBuilder();
         for (Object conteudo : conteudos) {
             if (conteudo instanceof Curso) {
                 Curso curso = (Curso) conteudo;
-                message += curso.getTitulo() + ", ";
+                message.append(curso.getTitulo()).append(", ");
             } else if (conteudo instanceof Mentoria) {
                 Mentoria mentoria = (Mentoria) conteudo;
-                message += mentoria.getTitulo() + ", ";
+                message.append(mentoria.getTitulo()).append(", ");
             }
         }
-        return (message.equals("")) ? "Nenhum conteúdo." : message.substring(0, message.length() - 2) + ".";
+        message = new StringBuilder((message.toString().equals(""))
+                ? "Nenhum conteúdo."
+                : message.substring(0, message.length() - 2) + ".");
+
+        return message;
     }
 }

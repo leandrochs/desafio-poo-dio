@@ -65,7 +65,8 @@ public class Main {
         do {
             System.out.println("\nDigite uma opção: \n" +
                     "1 - Ver cursos \n" +
-                    "2 - Ver devs \n" +
+                    "2 - Ver Mentorias \n" +
+                    "3 - Ver devs \n" +
                     "0 - Sair");
 
             option = scanner.nextInt();
@@ -75,9 +76,11 @@ public class Main {
                     getCursos(bootcamp.getConteudos());
                     break;
                 case 2:
-                    System.out.println("escolheu 2");
+                    getMentorias(bootcamp.getConteudos());
                     break;
-
+                case 3:
+                    System.out.println("escolheu 3");
+                    break;
                 case 0:
                     System.out.println("Good By!");
                     break;
@@ -94,7 +97,19 @@ public class Main {
                 Curso curso = (Curso) conteudo;
                 System.out.println("Título: " + curso.getTitulo() +
                         "\nDescição: " + curso.getDescricao() +
-                        "\nCarga Horária: " + curso.getCargaHoraria() + "\n");
+                        "\nData: " + curso.getCargaHoraria() + "\n");
+            }
+        }
+    }
+
+    public static void getMentorias(Set conteudos) {
+        System.out.println("\nAs Mentorias disponíveis são as seguintes:");
+        for (Object conteudo : conteudos) {
+            if (conteudo instanceof Mentoria) {
+                Mentoria mentoria = (Mentoria) conteudo;
+                System.out.println("Título: " + mentoria.getTitulo() +
+                        "\nDescição: " + mentoria.getDescricao() +
+                        "\nCarga Horária: " + mentoria.getData() + "\n");
             }
         }
     }

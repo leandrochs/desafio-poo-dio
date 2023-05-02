@@ -24,10 +24,6 @@ public class Main {
         mentoria.setDescricao("descrição mentoria java");
         mentoria.setData(LocalDate.now());
 
-        /*System.out.println(curso1);
-        System.out.println(curso2);
-        System.out.println(mentoria);*/
-
         Bootcamp bootcamp = new Bootcamp();
         bootcamp.setNome("Bootcamp Java Developer");
         bootcamp.setDescricao("Descrição Bootcamp Java Developer");
@@ -69,6 +65,7 @@ public class Main {
                     "3 - Ver devs \n" +
                     "0 - Sair");
 
+
             option = scanner.nextInt();
 
             switch (option) {
@@ -79,13 +76,13 @@ public class Main {
                     getMentorias(bootcamp.getConteudos());
                     break;
                 case 3:
-                    System.out.println("escolheu 3");
+                    getDevs(bootcamp.getDevsInscritos());
                     break;
                 case 0:
                     System.out.println("Good By!");
                     break;
                 default:
-                    System.out.println("Escolha inválida");
+                    System.out.println("Opção inválida");
             }
         } while (option != 0);
     }
@@ -112,5 +109,30 @@ public class Main {
                         "\nCarga Horária: " + mentoria.getData() + "\n");
             }
         }
+    }
+
+    public static void getDevs(Set<Dev> devsInscritos) {
+        System.out.println("\nOs Devs inscritos são os seguintes:");
+        for (Dev dev : devsInscritos) {
+            System.out.println("Nome: " + dev.getNome() +
+                    "\nConteúdos inscritos: " + getTitulos(dev.getConteudosInscritos()) +
+                    "\nConteúdos concluídos: " + getTitulos(dev.getConteudosConcluidos()) +
+                    "\nTotal XP: " + dev.calcularTotalXp() + "\n");
+        }
+    }
+
+    public static String getTitulos(Set conteudos) {
+        String message = "";
+        for (Object conteudo : conteudos) {
+            if (conteudo instanceof Curso) {
+                Curso curso = (Curso) conteudo;
+                message += curso.getTitulo() + ", ";
+            } else if (conteudo instanceof Mentoria) {
+                Mentoria mentoria = (Mentoria) conteudo;
+                message += mentoria.getTitulo() + ", ";
+            }
+        }
+
+        return (message.equals("")) ? "Nenhum conteúdo." : message.substring(0, message.length() - 2) + ".";
     }
 }
